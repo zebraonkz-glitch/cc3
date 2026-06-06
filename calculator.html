@@ -11,28 +11,107 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --calculator-bg: #ffffff;
+            --calculator-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            --display-bg: #1a1a1a;
+            --display-color: #ffffff;
+            --btn-bg: #f0f0f0;
+            --btn-color: #333333;
+            --btn-hover-bg: #e0e0e0;
+            --btn-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            --btn-active-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            --operator-bg: #667eea;
+            --operator-hover-bg: #5568d3;
+            --equals-bg: #764ba2;
+            --equals-hover-bg: #653a8a;
+            --clear-bg: #ff6b6b;
+            --clear-hover-bg: #ee5a5a;
+            --accent-color: #ffffff;
+            --theme-toggle-bg: rgba(255, 255, 255, 0.2);
+            --theme-toggle-hover-bg: rgba(255, 255, 255, 0.35);
+        }
+
+        [data-theme="dark"] {
+            --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            --calculator-bg: #2d2d3a;
+            --calculator-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            --display-bg: #0d0d12;
+            --display-color: #e8e8e8;
+            --btn-bg: #3d3d4d;
+            --btn-color: #e8e8e8;
+            --btn-hover-bg: #4d4d5d;
+            --btn-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            --btn-active-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+            --operator-bg: #5a6fd6;
+            --operator-hover-bg: #4a5fc6;
+            --equals-bg: #8b5fbf;
+            --equals-hover-bg: #7b4faf;
+            --clear-bg: #e05555;
+            --clear-hover-bg: #d04545;
+            --accent-color: #ffffff;
+            --theme-toggle-bg: rgba(255, 255, 255, 0.1);
+            --theme-toggle-hover-bg: rgba(255, 255, 255, 0.2);
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg-gradient);
             padding: 20px;
+            transition: background 0.3s ease;
         }
 
         .calculator {
-            background: #ffffff;
+            background: var(--calculator-bg);
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: var(--calculator-shadow);
             padding: 30px;
             max-width: 400px;
             width: 100%;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .calculator-header {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 15px;
+        }
+
+        .theme-toggle {
+            background: var(--theme-toggle-bg);
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            font-size: 1.4rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, transform 0.2s;
+            padding: 0;
+            color: inherit;
+        }
+
+        .theme-toggle:hover {
+            background: var(--theme-toggle-hover-bg);
+            transform: scale(1.1);
+            box-shadow: none;
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95);
+            box-shadow: none;
         }
 
         .display {
-            background: #1a1a1a;
-            color: #ffffff;
+            background: var(--display-bg);
+            color: var(--display-color);
             font-size: 2.5rem;
             padding: 20px;
             text-align: right;
@@ -44,6 +123,7 @@
             justify-content: flex-end;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         .buttons {
@@ -53,7 +133,7 @@
         }
 
         button {
-            background: #f0f0f0;
+            background: var(--btn-bg);
             border: none;
             border-radius: 10px;
             font-size: 1.5rem;
@@ -61,54 +141,66 @@
             cursor: pointer;
             transition: all 0.2s;
             font-weight: 600;
-            color: #333;
+            color: var(--btn-color);
         }
 
         button:hover {
-            background: #e0e0e0;
+            background: var(--btn-hover-bg);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--btn-shadow);
         }
 
         button:active {
             transform: translateY(0);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--btn-active-shadow);
         }
 
         .operator {
-            background: #667eea;
-            color: #ffffff;
+            background: var(--operator-bg);
+            color: var(--accent-color);
         }
 
         .operator:hover {
-            background: #5568d3;
+            background: var(--operator-hover-bg);
         }
 
         .equals {
-            background: #764ba2;
-            color: #ffffff;
+            background: var(--equals-bg);
+            color: var(--accent-color);
         }
 
         .equals:hover {
-            background: #653a8a;
+            background: var(--equals-hover-bg);
         }
 
         .clear {
-            background: #ff6b6b;
-            color: #ffffff;
+            background: var(--clear-bg);
+            color: var(--accent-color);
         }
 
         .clear:hover {
-            background: #ee5a5a;
+            background: var(--clear-hover-bg);
         }
 
         .zero {
             grid-column: span 2;
         }
     </style>
+    <script>
+        (function () {
+            var saved = localStorage.getItem('calculator-theme');
+            var theme = (saved === 'light' || saved === 'dark')
+                ? saved
+                : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 </head>
 <body>
     <div class="calculator">
+        <div class="calculator-header">
+            <button class="theme-toggle" id="themeToggle" type="button" aria-label="Переключить тему" title="Переключить тему">🌙</button>
+        </div>
         <div class="display" id="display">0</div>
         <div class="buttons">
             <button class="clear" onclick="clearDisplay()">C</button>
@@ -137,6 +229,34 @@
     </div>
 
     <script>
+        const THEME_KEY = 'calculator-theme';
+        const themeToggle = document.getElementById('themeToggle');
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+            themeToggle.setAttribute('aria-label', theme === 'dark' ? 'Включить светлую тему' : 'Включить тёмную тему');
+            themeToggle.title = theme === 'dark' ? 'Светлая тема' : 'Тёмная тема';
+        }
+
+        function getPreferredTheme() {
+            const saved = localStorage.getItem(THEME_KEY);
+            if (saved === 'light' || saved === 'dark') {
+                return saved;
+            }
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme') || 'light';
+            const next = current === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+            localStorage.setItem(THEME_KEY, next);
+        }
+
+        applyTheme(getPreferredTheme());
+        themeToggle.addEventListener('click', toggleTheme);
+
         let display = document.getElementById('display');
         let currentInput = '0';
         let shouldResetDisplay = false;
