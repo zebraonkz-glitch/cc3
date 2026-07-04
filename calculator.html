@@ -148,14 +148,8 @@
             align-items: center;
             justify-content: flex-end;
             overflow: hidden;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-
-        .display-value {
             white-space: nowrap;
-            max-width: 100%;
-            overflow: hidden;
-            line-height: 1.2;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         .buttons {
@@ -346,7 +340,7 @@
             <div class="calculator-header">
                 <button class="theme-toggle" id="themeToggle" type="button" aria-label="Переключить тему" title="Переключить тему">🌙</button>
             </div>
-            <div class="display" id="display"><span class="display-value" id="displayValue">0</span></div>
+            <div class="display" id="display">0</div>
             <div class="buttons">
                 <button class="clear" onclick="clearDisplay()">C</button>
                 <button class="operator" onclick="appendOperator('/')">/</button>
@@ -496,39 +490,44 @@
         loadHistory();
 
         let display = document.getElementById('display');
-        let displayValue = document.getElementById('displayValue');
         let currentInput = '0';
         let shouldResetDisplay = false;
 
-        const DISPLAY_MAX_FONT = 2.5;
-        const DISPLAY_MIN_FONT = 0.85;
-
-        function fitDisplayFontSize() {
-            display.style.fontSize = DISPLAY_MAX_FONT + 'rem';
-
-            let size = DISPLAY_MAX_FONT;
-            while (displayValue.scrollWidth > display.clientWidth && size > DISPLAY_MIN_FONT) {
-                size -= 0.05;
-                display.style.fontSize = size + 'rem';
-            }
-        }
+        const MAX_NUMBER_LENGTH = 12;
 
         function updateDisplay() {
-            displayValue.textContent = currentInput;
-            fitDisplayFontSize();
+            display.textContent = currentInput;
         }
 
-        window.addEventListener('resize', fitDisplayFontSize);
+        function isOperandAtLimit() {
+            return getCurrentOperand(currentInput).length >= MAX_NUMBER_LENGTH;
+        }
+
+        function formatResult(value) {
+            let str = String(value);
+            if (str.length <= MAX_NUMBER_LENGTH) {
+                return str;
+            }
+            const num = Number(value);
+            if (!isFinite(num)) {
+                return str.slice(0, MAX_NUMBER_LENGTH);
+            }
+            const exp = num.toExponential(MAX_NUMBER_LENGTH - 6);
+            return exp.length <= MAX_NUMBER_LENGTH ? exp : num.toExponential(4);
+        }
 
         function appendNumber(number) {
             if (shouldResetDisplay) {
                 currentInput = '0';
                 shouldResetDisplay = false;
             }
-            
+
             if (currentInput === '0') {
                 currentInput = number;
             } else {
+                if (isOperandAtLimit()) {
+                    return;
+                }
                 currentInput += number;
             }
             updateDisplay();
@@ -568,6 +567,9 @@
             if (operand === '') {
                 currentInput += '0.';
             } else {
+                if (isOperandAtLimit()) {
+                    return;
+                }
                 currentInput += '.';
             }
             updateDisplay();
@@ -607,7 +609,7 @@
                     currentInput = 'Ошибка';
                     addToHistory(originalExpression, 'Ошибка');
                 } else {
-                    currentInput = result.toString();
+                    currentInput = formatResult(result);
                     addToHistory(originalExpression, currentInput);
                 }
 
