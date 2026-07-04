@@ -86,6 +86,7 @@
 
         .app {
             display: flex;
+            flex-direction: row-reverse;
             gap: 20px;
             align-items: flex-start;
             max-width: 720px;
@@ -511,16 +512,43 @@
             updateDisplay();
         }
 
+        function getCurrentOperand(input) {
+            const lastOpIndex = Math.max(
+                input.lastIndexOf('+'),
+                input.lastIndexOf('-'),
+                input.lastIndexOf('*'),
+                input.lastIndexOf('/')
+            );
+
+            if (lastOpIndex === -1) {
+                return input;
+            }
+
+            if (lastOpIndex === 0 && input[0] === '-') {
+                return input.slice(1);
+            }
+
+            return input.slice(lastOpIndex + 1);
+        }
+
         function appendDecimal() {
             if (shouldResetDisplay) {
                 currentInput = '0';
                 shouldResetDisplay = false;
             }
-            
-            if (!currentInput.includes('.')) {
-                currentInput += '.';
-                updateDisplay();
+
+            const operand = getCurrentOperand(currentInput);
+
+            if (operand.includes('.')) {
+                return;
             }
+
+            if (operand === '') {
+                currentInput += '0.';
+            } else {
+                currentInput += '.';
+            }
+            updateDisplay();
         }
 
         function appendOperator(operator) {
